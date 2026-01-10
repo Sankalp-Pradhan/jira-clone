@@ -1,6 +1,6 @@
 "use server"
 
-import {  Query } from "node-appwrite"
+import { Query } from "node-appwrite"
 import { createSessionClient } from "@/lib/appwrite"
 
 import { getMember } from "../members/utils"
@@ -10,7 +10,7 @@ import { Workspace } from "./types"
 
 export const getWorkspaces = async () => {
   try {
-    const {databases , account} = await createSessionClient();
+    const { databases, account } = await createSessionClient();
     const user = await account.get();
 
     const members = await databases.listDocuments(
@@ -45,7 +45,7 @@ interface GetWorkspaceProps {
 
 export const getWorkspace = async ({ workspaceId }: GetWorkspaceProps) => {
   try {
-    const {databases , account} = await createSessionClient();
+    const { databases, account } = await createSessionClient();
     const user = await account.get();
 
     const member = await getMember({
@@ -68,6 +68,28 @@ export const getWorkspace = async ({ workspaceId }: GetWorkspaceProps) => {
 
 
     return workspace
+  } catch (error) {
+    null;
+  }
+}
+interface GetWorkspaceInfoProps {
+  workspaceId: string;
+}
+
+export const getWorkspaceInfo = async ({ workspaceId }: GetWorkspaceInfoProps) => {
+  try {
+    const { databases } = await createSessionClient();
+
+    const workspace = await databases.getDocument<Workspace>(
+      DATABASE_ID,
+      WORKSPACES_ID,
+      workspaceId,
+    );
+
+
+    return {
+      name : workspace.name
+    }
   } catch (error) {
     null;
   }

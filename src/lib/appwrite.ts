@@ -15,7 +15,7 @@ export async function createSessionClient() {
         .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
         .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!)
 
-        const session = await cookies().get(AUTH_COOKIE);
+    const session = await cookies().get(AUTH_COOKIE);
 
     if (!session || !session.value) {
         throw new Error("Unauthorized");
@@ -59,6 +59,9 @@ export async function createAdminClient() {
     return {
         get account() {
             return new Account(client);
+        },
+        get users() {
+            return new Users(client);
         }
     };
 }

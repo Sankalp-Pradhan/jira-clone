@@ -26,7 +26,7 @@ import { cn } from "@/lib/utils";
 
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 import { useCreateTask } from "../api/use-create-task";
-import { createTasksSchema } from "../schema";
+import { createTasksFormSchema } from "../schema";
 import { DatePicker } from "@/components/date-picker";
 import { MemberAvatar } from "@/features/workspaces/components/member-avatar";
 import { TaskStatus } from "../types";
@@ -36,11 +36,11 @@ import { ProjectAvatar } from "@/features/projects/components/project-avatar";
 interface CreateTaskFormProps {
     onCancel?: () => void;
     projectOptions: { id: string, name: string, imageUrl: string }[];
-    memberOptions: { id: string, name: string }[];
+    memberOptions: { id: string, name: string }[];  
 }
 
 // Define output type for the form (after coercion)
-type FormValues = z.input<typeof createTasksSchema>;
+type FormValues = z.infer<typeof createTasksFormSchema>;
 
 export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: CreateTaskFormProps) => {
     const workspaceId = useWorkspaceId();
@@ -50,7 +50,7 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
     const inputRef = useRef<HTMLInputElement>(null)
 
     const form = useForm<FormValues>({
-        resolver: zodResolver(createTasksSchema),
+        resolver: zodResolver(createTasksFormSchema),
         defaultValues: {
             workspaceId,
         }
@@ -58,10 +58,16 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
 
 
     const onSubmit = (values: FormValues) => {
-        mutate({ json: values }, {
+        // ✅ Transform Date to ISO string before sending to API
+        mutate({
+            json: {
+                ...values,
+                dueDate: values.dueDate.toISOString(), // Convert Date to string
+            }
+        }, {
             onSuccess: () => {
                 form.reset();
-                onCancel?.()
+                onCancel?.();
             }
         });
     };

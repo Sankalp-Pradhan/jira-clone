@@ -1,5 +1,5 @@
 import { toast } from "sonner";
-import { Mutation, QueryClient, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { InferRequestType, InferResponseType } from "hono";
 import { client } from "@/lib/rpc";
 import { useMutation } from "@tanstack/react-query";
@@ -33,8 +33,9 @@ export const useUpdateProject = () => {
         onSuccess: ({ data }) => {
             toast.success("Project updated");
             queryClient.invalidateQueries({ queryKey: ["projects"] })
-            queryClient.invalidateQueries({ queryKey: ["projects", data.$id] })
-            
+            queryClient.invalidateQueries({ queryKey: ["project", data.$id] })
+            router.refresh();
+
         },
         onError: () => {
             toast.error("Failed to update project");

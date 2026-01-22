@@ -36,7 +36,7 @@ import { ProjectAvatar } from "@/features/projects/components/project-avatar";
 interface CreateTaskFormProps {
     onCancel?: () => void;
     projectOptions: { id: string, name: string, imageUrl: string }[];
-    memberOptions: { id: string, name: string }[];  
+    memberOptions: { id: string, name: string }[];
 }
 
 // Define output type for the form (after coercion)
@@ -256,6 +256,12 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
                                 type="submit"
                                 size="lg"
                                 disabled={isPending}
+                                onClick={(e) => {
+                                    console.log("🔴 BUTTON CLICKED!");
+                                    console.log("isPending:", isPending);
+                                    console.log("Event:", e);
+                                }}
+                                style={{ position: 'relative', zIndex: 9999, backgroundColor: 'red' }}
                             >
                                 Create Task
                             </Button>

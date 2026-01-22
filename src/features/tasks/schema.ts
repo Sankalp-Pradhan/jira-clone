@@ -4,7 +4,7 @@ import { TaskStatus } from "./types";
 // API schema - accepts string dates from JSON
 export const createTasksSchema = z.object({
     name: z.string().min(1, "Required"),
-    status: z.enum(TaskStatus),
+    status: z.nativeEnum(TaskStatus),
     workspaceId: z.string().min(1, "Required"),
     projectId: z.string().min(1, "Required"),
     dueDate: z.string(),
@@ -15,7 +15,7 @@ export const createTasksSchema = z.object({
 // Form schema - uses Date objects for react-hook-form
 export const createTasksFormSchema = z.object({
     name: z.string().min(1, "Required"),
-    status: z.enum(TaskStatus),
+    status: z.nativeEnum(TaskStatus),
     workspaceId: z.string().min(1, "Required"),
     projectId: z.string().min(1, "Required"),
     dueDate: z.date(),
